@@ -1,0 +1,1376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2014-07-14 14:55:03">
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>true</global>
+<messages/>
+<name>info messages per state</name>
+<script><![CDATA[function onLoad() {
+   //Type appropriate comment here, and begin script below
+   var stateis = g_form.getValue('state');
+   var typeis = g_form.getValue('u_change_request_type');
+   var ciclass = g_form.getValue('cmdb_ci');
+	
+   if (stateis==63 && typeis=='standard'){
+      g_form.addInfoMessage('To advance the workflow, use the Request Approval button.');
+   }
+	
+   if (stateis==63 && typeis=='emergency'){
+      g_form.addInfoMessage('To advance the workflow, use the Review Complete button.');
+   }
+	 
+   if (stateis==63 && typeis=='preapproved'){
+      g_form.addInfoMessage('To advance the workflow, use the Review Complete button.');
+   }	 
+	
+   if (stateis==64 || stateis==65){
+      g_form.addInfoMessage('The workflow will not be advanced until the request is approved or rejected.');
+   }
+	
+   if (stateis==66){
+      g_form.addInfoMessage('To advance the workflow, please close the Build master change task.');
+   }
+	
+   if (stateis==67){
+      g_form.addInfoMessage('To advance the workflow, please close the UAT master change task.');
+   }
+
+	
+   if (stateis==68){
+      g_form.addInfoMessage('To advance the workflow, use the UAT Pass or UAT Fail buttons.');
+   }
+	
+  if (stateis==69){
+      g_form.addInfoMessage('To advance the workflow, use the Request Deploy Approval button.');
+   }
+		
+  if (stateis==70){
+      g_form.addInfoMessage('The workflow will not be advanced until the request is approved or rejected.');
+   }
+	
+  if (stateis==71){
+      g_form.addInfoMessage('To advance the workflow, please close the Deploy master change task.');
+   }
+
+  if (stateis==72){
+      g_form.addInfoMessage('To advance the workflow, please close the Certify master change task.');
+   }
+	
+  if (stateis==74){
+      g_form.addInfoMessage('To advance the workflow, please close the PIR master change task.');
+   }
+		
+		
+	
+   if (stateis==79){
+      g_form.addInfoMessage('The workflow cannot be advanced until the Pending Business Info record is closed by using the Close checkbox.');
+   }
+   
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2014-04-27 22:19:21</sys_created_on>
+<sys_domain>global                          </sys_domain>
+<sys_id>8a59d65679d8210057c4673674a2b968</sys_id>
+<sys_mod_count>43</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2014-07-09 15:11:54</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>u_est__requirements</field>
+<global>true</global>
+<messages/>
+<name>est requirements - calculate total</name>
+<script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
+   if (isLoading || newValue == '') {
+      return;
+   }
+
+   //adds all estimates together and puts them into the est. total field
+	var req = parseInt(g_form.getValue('u_est__requirements',10));
+	var des = parseInt(g_form.getValue('u_est__design',10));
+	var dev = parseInt(g_form.getValue('u_est__dev_config',10));
+	var itt = parseInt(g_form.getValue('u_est__it_test',10));
+	
+		var newtotal = 0;
+	newtotal = req + des + dev + itt;
+	
+	var daytotal = newtotal / 24;
+	if(daytotal < 1){
+		daytotal = 0;
+    }
+	else{
+		daytotal = Math.round(daytotal);
+	}
+	
+	var hourtotal = newtotal % 24;
+	
+	g_form.setValue('u_est__total', daytotal + " Days, " + hourtotal + " Hours");
+	
+	   
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2014-04-28 00:15:19</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>1723b2da79d8210057c4673674a2b983</sys_id>
+<sys_mod_count>8</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2014-05-15 20:25:44</sys_updated_on>
+<table>change_request</table>
+<type>onChange</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>u_est__design</field>
+<global>true</global>
+<messages/>
+<name>est design - calculate total</name>
+<script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
+   if (isLoading || newValue == '') {
+      return;
+   }
+
+   //adds all estimates together and puts them into the est. total field
+	var req = parseInt(g_form.getValue('u_est__requirements',10));
+	var des = parseInt(g_form.getValue('u_est__design',10));
+	var dev = parseInt(g_form.getValue('u_est__dev_config',10));
+	var itt = parseInt(g_form.getValue('u_est__it_test',10));
+		
+	var newtotal = 0;
+	newtotal = req + des + dev + itt;
+	
+	var daytotal = newtotal / 24;
+	if(daytotal < 1){
+		daytotal = 0;
+    }
+	else{
+		daytotal = Math.round(daytotal);
+	}
+	
+	var hourtotal = newtotal % 24;
+	
+	g_form.setValue('u_est__total', daytotal + " Days, " + hourtotal + " Hours");
+	
+	   
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2014-04-28 01:51:55</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>8a1ac79e79d8210057c4673674a2b969</sys_id>
+<sys_mod_count>1</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2014-05-15 20:25:34</sys_updated_on>
+<table>change_request</table>
+<type>onChange</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>u_est__it_test</field>
+<global>true</global>
+<messages/>
+<name>est it test - calculate total</name>
+<script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
+   if (isLoading || newValue == '') {
+      return;
+   }
+
+   //adds all estimates together and puts them into the est. total field
+	var req = parseInt(g_form.getValue('u_est__requirements',10));
+	var des = parseInt(g_form.getValue('u_est__design',10));
+	var dev = parseInt(g_form.getValue('u_est__dev_config',10));
+	var itt = parseInt(g_form.getValue('u_est__it_test',10));
+	
+	
+	var newtotal = 0;
+	newtotal = req + des + dev + itt;
+	
+	var daytotal = newtotal / 24;
+	if(daytotal < 1){
+		daytotal = 0;
+    }
+	else{
+		daytotal = Math.round(daytotal);
+	}
+	
+	var hourtotal = newtotal % 24;
+	
+	g_form.setValue('u_est__total', daytotal + " Days, " + hourtotal + " Hours");
+	
+	   
+}
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+
+	
+   
+]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2014-04-28 01:52:53</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>8c5a839e79d8210057c4673674a2b9c7</sys_id>
+<sys_mod_count>1</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2014-05-15 20:25:24</sys_updated_on>
+<table>change_request</table>
+<type>onChange</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>u_est__dev_config</field>
+<global>true</global>
+<messages/>
+<name>est dev/config - calculate total</name>
+<script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
+   if (isLoading || newValue == '') {
+      return;
+   }
+
+   //adds all estimates together and puts them into the est. total field
+	var req = parseInt(g_form.getValue('u_est__requirements',10));
+	var des = parseInt(g_form.getValue('u_est__design',10));
+	var dev = parseInt(g_form.getValue('u_est__dev_config',10));
+	var itt = parseInt(g_form.getValue('u_est__it_test',10));
+		
+	var newtotal = 0;
+	newtotal = req + des + dev + itt;
+	
+	var daytotal = newtotal / 24;
+	if(daytotal < 1){
+		daytotal = 0;
+    }
+	else{
+		daytotal = Math.round(daytotal);
+	}
+	
+	var hourtotal = newtotal % 24;
+	
+	g_form.setValue('u_est__total', daytotal + " Days, " + hourtotal + " Hours");
+	
+	   
+}
+]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2014-04-28 01:52:08</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>492ac79e79d8210057c4673674a2b9a8</sys_id>
+<sys_mod_count>1</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2014-05-15 20:25:18</sys_updated_on>
+<table>change_request</table>
+<type>onChange</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>u_act__requirements</field>
+<global>true</global>
+<messages/>
+<name>act requirements - calculate total</name>
+<script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
+   if (isLoading || newValue == '') {
+      return;
+   }
+
+   //adds all estimates together and puts them into the est. total field
+	var req = parseInt(g_form.getValue('u_act__requirements'),10);
+	var des = parseInt(g_form.getValue('u_act__design'),10);
+	var dev = parseInt(g_form.getValue('u_act__dev_config'),10);
+	var itt = parseInt(g_form.getValue('u_act_it_test'),10);
+	
+	var newtotal = 0;
+	newtotal = req + des + dev + itt;
+	
+	var daytotal = newtotal / 24;
+	if(daytotal < 1){
+		daytotal = 0;
+    }
+	else{
+		daytotal = Math.round(daytotal);
+	}
+	
+	var hourtotal = newtotal % 24;
+	
+	g_form.setValue('u_act__total', daytotal + " Days, " + hourtotal + " Hours");
+	
+	   
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2014-05-14 23:15:59</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>a769c67379eca10057c4673674a2b926</sys_id>
+<sys_mod_count>17</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2014-05-15 20:11:24</sys_updated_on>
+<table>change_request</table>
+<type>onChange</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>u_act__design</field>
+<global>true</global>
+<messages/>
+<name>act design - calculate total</name>
+<script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
+   if (isLoading || newValue == '') {
+      return;
+   }
+
+   //adds all estimates together and puts them into the est. total field
+	var req = parseInt(g_form.getValue('u_act__requirements',10));
+	var des = parseInt(g_form.getValue('u_act__design',10));
+	var dev = parseInt(g_form.getValue('u_act__dev_config',10));
+	var itt = parseInt(g_form.getValue('u_act_it_test',10));
+	
+	var newtotal = 0;
+	newtotal = req + des + dev + itt;
+	
+	var daytotal = newtotal / 24;
+	if(daytotal < 1){
+		daytotal = 0;
+    }
+	else{
+		daytotal = Math.round(daytotal);
+	}
+	
+	var hourtotal = newtotal % 24;
+	
+	g_form.setValue('u_act__total', daytotal + " Days, " + hourtotal + " Hours");
+	
+	   
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2014-05-14 23:15:48</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>fc69027379eca10057c4673674a2b96a</sys_id>
+<sys_mod_count>2</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2014-05-15 20:11:00</sys_updated_on>
+<table>change_request</table>
+<type>onChange</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>u_act__dev_config</field>
+<global>true</global>
+<messages/>
+<name>act dev/config test - calculate total</name>
+<script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
+   if (isLoading || newValue == '') {
+      return;
+   }
+
+   //adds all estimates together and puts them into the est. total field
+	var req = parseInt(g_form.getValue('u_act__requirements',10));
+	var des = parseInt(g_form.getValue('u_act__design',10));
+	var dev = parseInt(g_form.getValue('u_act__dev_config',10));
+	var itt = parseInt(g_form.getValue('u_act_it_test',10));
+	
+	var newtotal = 0;
+	newtotal = req + des + dev + itt;
+	
+	var daytotal = newtotal / 24;
+	if(daytotal < 1){
+		daytotal = 0;
+    }
+	else{
+		daytotal = Math.round(daytotal);
+	}
+	
+	var hourtotal = newtotal % 24;
+	
+	g_form.setValue('u_act__total', daytotal + " Days, " + hourtotal + " Hours");
+	
+	   
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2014-05-14 23:15:37</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>1a59ca7379eca10057c4673674a2b9b9</sys_id>
+<sys_mod_count>2</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2014-05-15 20:10:52</sys_updated_on>
+<table>change_request</table>
+<type>onChange</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>u_act_it_test</field>
+<global>true</global>
+<messages/>
+<name>act it test - calculate total</name>
+<script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
+   if (isLoading || newValue == '') {
+      return;
+   }
+
+   //adds all estimates together and puts them into the est. total field
+	var req = parseInt(g_form.getValue('u_act__requirements',10));
+	var des = parseInt(g_form.getValue('u_act__design',10));
+	var dev = parseInt(g_form.getValue('u_act__dev_config',10));
+	var itt = parseInt(g_form.getValue('u_act_it_test',10));
+	
+	var newtotal = 0;
+	newtotal = req + des + dev + itt;
+	
+	var daytotal = newtotal / 24;
+	if(daytotal < 1){
+		daytotal = 0;
+    }
+	else{
+		daytotal = Math.round(daytotal);
+	}
+	
+	var hourtotal = newtotal % 24;
+	
+	g_form.setValue('u_act__total', daytotal + " Days, " + hourtotal + " Hours");
+	
+	   
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2014-05-14 22:48:23</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>d71302ff79aca10057c4673674a2b970</sys_id>
+<sys_mod_count>5</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2014-05-15 20:10:47</sys_updated_on>
+<table>change_request</table>
+<type>onChange</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>cmdb_ci</field>
+<global>true</global>
+<messages/>
+<name>set Assignment Group based on CI</name>
+<script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
+   if (isLoading || newValue == '') {
+      return;
+   }
+
+   //set assignment group based on the CI IF the assignment group field is empty
+	
+
+    var ci_assign_grp = g_form.getReference('cmdb_ci').support_group;
+    g_form.setValue('assignment_group',ci_assign_grp);
+
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2014-03-27 14:01:24</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>921eb8d441bf9140ef85214f957052f4</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2014-03-27 14:01:24</sys_updated_on>
+<table>change_request</table>
+<type>onChange</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>true</global>
+<messages/>
+<name>Hide State choices from non-admins.</name>
+<script><![CDATA[function onLoad() {
+  var isAdmin = g_user.hasRole('admin');
+  var state = g_form.getValue('u_change_state');
+  if (!isAdmin && (state == 5) || (state == 6) || (state==7) || (state==8)|| (state==19)){
+    //alert('Current user is not an admin');
+    g_form.removeOption('u_change_state', '0');
+    g_form.removeOption('u_change_state', '1');
+    g_form.removeOption('u_change_state', '2');
+    g_form.removeOption('u_change_state', '3');
+    g_form.removeOption('u_change_state', '4');
+    //g_form.removeOption('u_change_state', '8');
+    g_form.removeOption('u_change_state', '9');
+    g_form.removeOption('u_change_state', '10');
+    g_form.removeOption('u_change_state', '11');
+    g_form.removeOption('u_change_state', '12');
+    g_form.removeOption('u_change_state', '13');
+    g_form.removeOption('u_change_state', '14');
+    g_form.removeOption('u_change_state', '15');
+    g_form.removeOption('u_change_state', '17');
+    g_form.removeOption('u_change_state', '18');
+	g_form.removeOption('u_change_state', '61');
+    
+
+
+  }
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>mbadmin</sys_created_by>
+<sys_created_on>2010-03-25 18:26:13</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>9690582e4a36232d00a9f3567d9eeb6c</sys_id>
+<sys_mod_count>27</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2013-11-06 20:47:32</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>true</global>
+<messages/>
+<name>Lock CI Owner field</name>
+<script><![CDATA[function onLoad() {
+   //Type appropriate comment here, and begin script below
+ var isAdmin = g_user.hasRole('admin');
+ if(!isAdmin){
+     g_form.setReadonly('cmdb_ci.owned_by',true);
+     }
+     else{
+        g_form.setReadonly('cmdb_ci.owned_by',false);
+     }
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2011-02-16 18:31:06</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>2fbd6da10a0a3c7a0007fd55f022545d</sys_id>
+<sys_mod_count>1</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2011-02-16 18:34:00</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>cmdb_ci</field>
+<global>true</global>
+<messages/>
+<name>Provide Cat for CI</name>
+<script><![CDATA[function onChange(control, oldValue, newValue, isLoading) {
+//If the page isn't loading
+if (!isLoading) {
+//If the new value isn't blank
+if(newValue != '') {
+//Fill in category and subcategory of configuration item when not populated
+var a = g_form.getReference('cmdb_ci').category;
+g_form.setValue('category', a);
+
+
+
+}
+}
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2010-07-07 20:08:48</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>ae8550e10a0a3c7b01e639908aaa8145</sys_id>
+<sys_mod_count>2</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2010-11-22 20:13:19</sys_updated_on>
+<table>change_request</table>
+<type>onChange</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>false</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>u_change_request_type</field>
+<global>true</global>
+<messages/>
+<name>Show necessary date fields</name>
+<script><![CDATA[function onChange(control, oldValue, newValue, isLoading) {
+   //If the page isn't loading
+   if (!isLoading) {
+      //If the new value isn't blank
+      if(newValue != '') {
+         //Type appropriate comment here, and begin script below
+         
+
+      var crt = g_form.getValue('u_change_request_type');
+
+      if(crt == 'Standard' ){
+         g_form.setVisible('u_bus__own__approval',true);
+         g_form.setVisible('u_it_manager_approval',true);
+         g_form.setVisible('u_rel__to_production',true);
+         g_form.setVisible('u_crb_approval',true);         
+         g_form.setVisible('u_immediate_release_app_',false);
+      }
+
+      if(crt == 'Emergency'){
+         g_form.setVisible('u_bus_own_approval',false); 
+         g_form.setVisible('u_it_manager_approval',true);
+         g_form.setVisible('u_rel__to_production',true);
+         g_form.setVisible('u_crb_approval',false);
+         g_form.setVisible('u_immediate_release_app_',false);           
+    
+      }
+      
+      if(crt == 'Pre-Approved'){
+         g_form.setVisible('u_bus__own__approval',false); 
+         g_form.setVisible('u_crb_approval',false);
+         g_form.setVisible('u_immediate_release_app_',false);  
+         g_form.setVisible('u_it_manager_approval',false); 
+         
+      }
+
+
+      }
+   }
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2010-11-17 20:53:52</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>5b9571ad0a0a3c7a0028d341fc880500</sys_id>
+<sys_mod_count>5</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2010-11-18 16:01:15</sys_updated_on>
+<table>change_request</table>
+<type>onChange</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>false</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>true</global>
+<messages/>
+<name>Make Outage Fields Read Only</name>
+<script><![CDATA[function onLoad() {
+   //Type appropriate comment here, and begin script below
+var currentChangeState = g_form.getValue('u_change_state');
+
+if (currentChangeState == 9){
+      g_form.setReadonly('u_requires_production_outage',true);
+      g_form.setReadonly('u_it_communication_needed',true);
+      g_form.setReadonly('start_date',true);
+      g_form.setReadonly('end_date',true);
+      g_form.setReadonly('u_outage_description',true);
+      
+}
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2010-11-12 01:53:47</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>3dc978650a0a3c7a01a3f486b6c9d60d</sys_id>
+<sys_mod_count>2</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2010-11-17 19:00:36</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>true</global>
+<messages/>
+<name>Make CI Read-Only</name>
+<script><![CDATA[function onLoad() {
+   //Type appropriate comment here, and begin script below
+var currentChangeState = g_form.getValue('u_change_state');
+
+if (currentChangeState >= 3){
+g_form.setReadonly('cmdb_ci',true);
+   
+}
+
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>mbadmin</sys_created_by>
+<sys_created_on>2010-04-01 15:23:36</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>b9f6e1db4a36232d012ded370d54bdbf</sys_id>
+<sys_mod_count>17</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2010-09-09 15:39:42</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>false</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>true</global>
+<messages/>
+<name>Add info message</name>
+<script><![CDATA[function onLoad() {
+//Remove any existing form info message
+   removeInfoMessage('formInfo');
+   //Add an info message using the custom UI script
+   addInfoMessage('Please enter a reason for closure','formInfo');
+   }]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2010-07-08 18:03:54</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>b334ae1a0a0a3c7b016713f5df4ce77b</sys_id>
+<sys_mod_count>4</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2010-08-02 14:37:46</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>false</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>true</global>
+<messages/>
+<name>addInfoMessage TEST</name>
+<script><![CDATA[function onLoad() {
+//Remove any existing form info message
+removeInfoMessage('formInfo');
+//Add an info message using the custom UI script
+addInfoMessage('Please enter a reason for closure','formInfo');
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2010-07-08 18:24:24</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>b34c6a180a0a3c7a019daf600d2ef095</sys_id>
+<sys_mod_count>1</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2010-07-08 18:26:30</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>false</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>true</global>
+<messages/>
+<name>Add Info Message</name>
+<script><![CDATA[function onChange(control, oldValue, newValue, isLoading) {
+   if(newValue == 'Incident'){
+      //Remove any existing form info message
+      removeInfoMessage('formInfo');
+      //Add an info message using the custom UI script
+      addInfoMessage('Please enter Incident information','formInfo');
+   }
+   if(newValue == 'Request'){
+      //Remove any existing form info message
+      removeInfoMessage('formInfo');
+      //Add an info message using the custom UI script
+      addInfoMessage('Please enter Request information','formInfo');
+   }
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2010-07-07 21:29:22</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>aecf00be0a0a3c7b01504e545e6c856c</sys_id>
+<sys_mod_count>5</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2010-07-08 18:09:04</sys_updated_on>
+<table>change_request</table>
+<type>onChange</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>false</global>
+<messages/>
+<name>Hide Buttons on UI Action</name>
+<script><![CDATA[function onLoad() {
+//get all of the BUTTON tag elements in the document
+var refs = document.getElementsByTagName("BUTTON");
+
+//Remove all buttons except for the 'Update' button
+if (refs) {
+for (var i=0; i < refs.length; i++) {
+var ref = refs[i];
+var inner = ref.id;
+if (inner != 'sysverb_update'){
+ref.style.display = 'none';
+}
+}
+}
+}
+
+//Use this function to disable the context menu in the form
+function contextShow(e, tableName, timeoutValue, ttop, lleft){
+if(!g_user.hasRole('admin')){
+return false;
+}
+else{
+menuTable = tableName;
+
+var name = tableName;
+// if it doesn't start with context, lets make it
+if (name && name.substring(0, 8) != "context_"){
+name = "context_" + name;}
+
+if (getMenuByName(name)) {
+var contextMenu = getMenuByName(name).context;
+contextMenu.setProperty('timeout', timeoutValue);
+contextMenu.setProperty('top', ttop);
+contextMenu.setProperty('left', lleft);
+contextMenu.display(e);
+}
+
+return false;
+}
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2010-07-06 19:05:01</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>a9242cfd0a0a3c7b01f08b8f32bf87f6</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2010-07-06 19:05:01</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view>chgclosure_test</view>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>false</global>
+<messages/>
+<name>Hide Buttons</name>
+<script><![CDATA[function onLoad() {
+//get all of the BUTTON tag elements in the document
+var refs = document.getElementsByTagName("BUTTON");
+
+//Remove all buttons except for the 'Update' button
+if (refs) {
+for (var i=0; i < refs.length; i++) {
+var ref = refs[i];
+var inner = ref.id;
+if (inner != 'sysverb_update'){
+ref.style.display = 'none';
+}
+}
+}
+}
+
+//Use this function to disable the context menu in the form
+function contextShow(e, tableName, timeoutValue, ttop, lleft){
+if(!g_user.hasRole('admin')){
+return false;
+}
+else{
+menuTable = tableName;
+
+var name = tableName;
+// if it doesn't start with context, lets make it
+if (name && name.substring(0, 8) != "context_"){
+name = "context_" + name;}
+
+if (getMenuByName(name)) {
+var contextMenu = getMenuByName(name).context;
+contextMenu.setProperty('timeout', timeoutValue);
+contextMenu.setProperty('top', ttop);
+contextMenu.setProperty('left', lleft);
+contextMenu.display(e);
+}
+
+return false;
+}
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>mbadmin</sys_created_by>
+<sys_created_on>2010-04-13 19:23:05</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>f89fc5324a36232d00cffde5b45ef538</sys_id>
+<sys_mod_count>19</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2010-07-06 18:51:42</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view>chgclosure</view>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition>current.u_change_state = 2</condition>
+<description/>
+<field>active</field>
+<global>false</global>
+<messages/>
+<name>Hide Reason for Closure on Default View</name>
+<script><![CDATA[function onLoad() {
+   //Type appropriate comment here, and begin script below
+   g_form.setVisible('u_reason_for_closure', false);
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>mbadmin</sys_created_by>
+<sys_created_on>2010-04-14 12:45:54</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>fc592c4a4a36232d00c729ea6cdbdf6f</sys_id>
+<sys_mod_count>2</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>mbadmin</sys_updated_by>
+<sys_updated_on>2010-04-14 12:46:33</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view>Default</view>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>true</global>
+<messages/>
+<name>Hide "CRB Review" if user != CRB</name>
+<script><![CDATA[function onLoad() {
+  var isCRB = g_user.userName;
+  if (isCRB == 'chgreview')
+    // hide it
+    g_form.setVisible('u_crb_review', true);
+  else
+    // unhide it
+    g_form.setVisible('u_crb_review', false);
+}
+
+]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>mbadmin</sys_created_by>
+<sys_created_on>2010-04-07 18:32:28</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>d9876e774a36232d01d7e519525107b1</sys_id>
+<sys_mod_count>13</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>mbadmin</sys_updated_by>
+<sys_updated_on>2010-04-07 18:46:04</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>true</global>
+<messages/>
+<name>onSubmit, Change State = Initiated</name>
+<script><![CDATA[function onSubmit() {
+   //Type appropriate comment here, and begin script below
+
+var x = g_form.getValue('u_change_state');
+
+if(x <= 1){
+g_form.setValue('u_change_state', '2');
+}
+   
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>mbadmin</sys_created_by>
+<sys_created_on>2010-04-01 15:05:58</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>b9e6eed44a36232d00140f7cd5e9a741</sys_id>
+<sys_mod_count>5</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>mbadmin</sys_updated_by>
+<sys_updated_on>2010-04-05 12:36:19</sys_updated_on>
+<table>change_request</table>
+<type>onSubmit</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>true</global>
+<messages/>
+<name>Make Risk/Impact field read only</name>
+<script><![CDATA[function onLoad() {
+   
+var isAdmin = g_user.hasRole('admin');
+
+if (isAdmin){
+    g_form.setReadonly('risk',false);
+    g_form.setReadonly('impact',false);}
+else
+  { g_form.setReadonly('risk',true);
+    g_form.setReadonly('impact',true);
+}
+}
+
+]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>mbadmin</sys_created_by>
+<sys_created_on>2010-04-01 12:46:08</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>b962a9e24a36232d017920f3c76eff10</sys_id>
+<sys_mod_count>5</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>mbadmin</sys_updated_by>
+<sys_updated_on>2010-04-01 12:49:11</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>true</global>
+<messages/>
+<name>Make CRB Approval field read-only</name>
+<script><![CDATA[function onLoad() {
+   
+var isCRBApprover = g_user.hasRole('CRB Approver')
+if (isCRBApprover)
+   g_form.setReadonly('u_crb_approval',false);
+else
+   g_form.setReadonly('u_crb_approval',true);
+}
+
+
+]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>mbadmin</sys_created_by>
+<sys_created_on>2010-03-29 12:50:27</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>a9f2fb8e4a36232d007c0e97d6e98263</sys_id>
+<sys_mod_count>1</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>mbadmin</sys_updated_by>
+<sys_updated_on>2010-03-29 12:51:58</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>false</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>cmdb_ci</field>
+<global>true</global>
+<messages/>
+<name>Populate CI Business Owner</name>
+<script><![CDATA[function onChange(control, oldValue, newValue, isLoading) {
+   //If the page isn't loading
+   if (!isLoading) {
+      //If the new value isn't blank
+      if(newValue != '') {
+         //Type appropriate comment here, and begin script below
+
+      
+      var ci = g_form.getValue('cmdb_ci');
+      alert('CI =' + ci);
+
+      var rec = new GlideRecord('cmdb_ci');
+      rec.get("sys_id", ci);
+      rec.query();
+      alert ('Returned =' + rec.getRowCount());
+
+
+       
+    g_form.setValue('u_business_owner', 'David Linder');
+    gs.log ('u_business_owner = [' + g_form.getValue('u_business_owner') + ']')   
+       
+       
+       
+         
+      }
+   }
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>mbadmin</sys_created_by>
+<sys_created_on>2010-03-24 19:08:35</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>919301b94a36232d002912736fe236fa</sys_id>
+<sys_mod_count>8</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>dtadmin</sys_updated_by>
+<sys_updated_on>2010-03-26 17:59:34</sys_updated_on>
+<table>change_request</table>
+<type>onChange</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>true</global>
+<messages/>
+<name>Admin can view readonly fields</name>
+<script><![CDATA[function onLoad() {
+   
+   //g_form.setReadonly('incident_state',true);
+   
+   var a = g_form.getValue('phase');
+   
+   if (g_user.hasRole('admin') == false ){
+      
+      g_form.setReadonly('phase',true);
+
+      
+ 
+   }}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>mbadmin</sys_created_by>
+<sys_created_on>2010-01-26 14:09:46</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>6aeda0334a36232d014b9128014ddee0</sys_id>
+<sys_mod_count>1</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>mbadmin</sys_updated_by>
+<sys_updated_on>2010-01-26 14:11:21</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>true</global>
+<messages/>
+<name>Make "Work Type" field mandatory.</name>
+<script><![CDATA[function onLoad() {
+ g_form.setMandatory('u_work_type', true);
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>micbar</sys_created_by>
+<sys_created_on>2009-12-17 13:54:08</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>9ce7a1714a36232d015a526c02a8debc</sys_id>
+<sys_mod_count>0</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>micbar</sys_updated_by>
+<sys_updated_on>2009-12-17 13:54:08</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>false</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>u_business_unit</field>
+<global>true</global>
+<messages/>
+<name>Phase Default</name>
+<script><![CDATA[function onChange(control, oldValue, newValue, isLoading) {
+
+if (u_business_unit == SAP) 
+{
+
+current.phase = "Initiated";
+
+}
+
+if (u_business_unit == Infrastructure) 
+{
+
+current.phase = "Analysis";
+
+}
+
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>adacap</sys_created_by>
+<sys_created_on>2008-12-24 16:26:07</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>69d00e8e4a36232601d2d01b8eb00ac7</sys_id>
+<sys_mod_count>4</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>adacap</sys_updated_by>
+<sys_updated_on>2008-12-27 16:57:23</sys_updated_on>
+<table>change_request</table>
+<type>onChange</type>
+<view/>
+</sys_script_client>
+<sys_script_client action="INSERT_OR_UPDATE">
+<active>true</active>
+<applies_extended>false</applies_extended>
+<condition/>
+<description/>
+<field>active</field>
+<global>true</global>
+<messages/>
+<name>Hide/Reveal Change variables</name>
+<script><![CDATA[var g_cat_form = null;
+function onLoad() {
+  var cat = g_form.getValue('category');
+  if (cat != 'Server Reboot' && cat != 'Database Restore' && cat != 'DNS Change')
+     return;
+
+  var map = gel('variable_map');
+  var cat_form = new ServiceCatalogForm('ni', true, true);
+
+  var items = map.getElementsByTagName("item");
+  for (var i = 0; i < items.length; i++) {
+  	var item = items.item(i); 
+	var name = item.getAttribute('qname');
+	var id = item.id;
+        var nm = new NameMapEntry(name, "ni.QS" + id);
+        cat_form.addNameMapEntry(nm);
+  } 
+  
+  var reason = cat_form.getControl('reason');
+  if (!reason)
+    return;
+
+  var reason_detail = cat_form.getControl('reason_details');
+  if (!reason_detail)
+    return;
+
+  g_cat_form = cat_form;
+  setReasonVisibility(null, reason);
+  var els = document.getElementsByName(reason.name);
+  for (var i = 0; i < els.length; i++)
+    els[i].onclick = setReasonVisibility.bindAsEventListener(els[i]);
+ 
+
+}
+
+function setReasonVisibility(e, target) {
+   jslog('setReasonVisibility');
+   if (!e)
+      e = window.event;
+	
+   if (!target)    
+      target = e.target ? e.target : e.srcElement;
+   
+   var vis = false;
+   if (target.value == 'other')
+     vis = true;
+   
+   g_cat_form.setDisplay('reason_details', vis);
+}]]></script>
+<sys_class_name>sys_script_client</sys_class_name>
+<sys_created_by>glide.maint</sys_created_by>
+<sys_created_on>2007-11-17 20:24:47</sys_created_on>
+<sys_domain>global</sys_domain>
+<sys_id>4f47a7e8c0a8000500633dd9f32d81ea</sys_id>
+<sys_mod_count>38</sys_mod_count>
+<sys_overrides display_value="">global</sys_overrides>
+<sys_updated_by>glide.maint</sys_updated_by>
+<sys_updated_on>2007-11-18 18:15:07</sys_updated_on>
+<table>change_request</table>
+<type>onLoad</type>
+<view/>
+</sys_script_client>
+</unload>

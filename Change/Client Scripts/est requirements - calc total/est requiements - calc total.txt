@@ -1,0 +1,28 @@
+function onChange(control, oldValue, newValue, isLoading, isTemplate) {
+   if (isLoading || newValue == '') {
+      return;
+   }
+
+   //adds all estimates together and puts them into the est. total field
+	var req = parseInt(g_form.getValue('u_est__requirements',10));
+	var des = parseInt(g_form.getValue('u_est__design',10));
+	var dev = parseInt(g_form.getValue('u_est__dev_config',10));
+	var itt = parseInt(g_form.getValue('u_est__it_test',10));
+	
+		var newtotal = 0;
+	newtotal = req + des + dev + itt;
+	
+	var daytotal = newtotal / 24;
+	if(daytotal < 1){
+		daytotal = 0;
+    }
+	else{
+		daytotal = Math.round(daytotal);
+	}
+	
+	var hourtotal = newtotal % 24;
+	
+	g_form.setValue('u_est__total', daytotal + " Days, " + hourtotal + " Hours");
+	
+	   
+}

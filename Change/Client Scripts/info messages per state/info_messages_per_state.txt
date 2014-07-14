@@ -1,0 +1,62 @@
+function onLoad() {
+   //Type appropriate comment here, and begin script below
+   var stateis = g_form.getValue('state');
+   var typeis = g_form.getValue('u_change_request_type');
+   var ciclass = g_form.getValue('cmdb_ci');
+	
+   if (stateis==63 && typeis=='standard'){
+      g_form.addInfoMessage('To advance the workflow, use the Request Approval button.');
+   }
+	
+   if (stateis==63 && typeis=='emergency'){
+      g_form.addInfoMessage('To advance the workflow, use the Review Complete button.');
+   }
+	 
+   if (stateis==63 && typeis=='preapproved'){
+      g_form.addInfoMessage('To advance the workflow, use the Review Complete button.');
+   }	 
+	
+   if (stateis==64 || stateis==65){
+      g_form.addInfoMessage('The workflow will not be advanced until the request is approved or rejected.');
+   }
+	
+   if (stateis==66){
+      g_form.addInfoMessage('To advance the workflow, please close the Build master change task.');
+   }
+	
+   if (stateis==67){
+      g_form.addInfoMessage('To advance the workflow, please close the UAT master change task.');
+   }
+
+	
+   if (stateis==68){
+      g_form.addInfoMessage('To advance the workflow, use the UAT Pass or UAT Fail buttons.');
+   }
+	
+  if (stateis==69){
+      g_form.addInfoMessage('To advance the workflow, use the Request Deploy Approval button.');
+   }
+		
+  if (stateis==70){
+      g_form.addInfoMessage('The workflow will not be advanced until the request is approved or rejected.');
+   }
+	
+  if (stateis==71){
+      g_form.addInfoMessage('To advance the workflow, please close the Deploy master change task.');
+   }
+
+  if (stateis==72){
+      g_form.addInfoMessage('To advance the workflow, please close the Certify master change task.');
+   }
+	
+  if (stateis==74){
+      g_form.addInfoMessage('To advance the workflow, please close the PIR master change task.');
+   }
+		
+		
+	
+   if (stateis==79){
+      g_form.addInfoMessage('The workflow cannot be advanced until the Pending Business Info record is closed by using the Close checkbox.');
+   }
+   
+}

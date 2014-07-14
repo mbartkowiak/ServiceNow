@@ -1,0 +1,56 @@
+//Client-side 'onclick' function
+function uat_comp(){
+ //  if(<CONDITION_TO_VALIDATE> == false){
+ //     return false;  //Abort submission
+ //  }
+   //Call the UI Action and skip the 'onclick' function
+  // gsftSubmit(null, g_form.getFormElement(), 'workverify'); //MUST call the 'Action name' set in this UI Action
+   
+	var chgSysid = g_form.getUniqueValue();
+
+	var gr = new GlideRecord('change_task'); //Indicate the table to query from
+    var count = 0;
+    gr.addQuery('change_request', chgSysid);
+    gr.query(); //Execute the query
+	
+    while (gr.next()) { //While the recordset contains records, iterate through them
+   //Do something with the records returned
+   if(gr.state==63){
+      count++;
+   }
+}
+	
+	   if(count > 0){
+		alert("All Change Tasks have not been closed.  Please close all Change Tasks to continue.");
+	}
+	
+
+	else{
+	
+	
+	
+	
+    var ans = confirm("Are you sure you want to complete testing for this change?");
+
+if(ans == false){
+return false;
+}
+else{
+gsftSubmit(null, g_form.getFormElement(), 'uat_complete');
+}
+		
+}
+}
+
+//Code that runs without 'onclick'
+//Ensure call to server-side function with no browser errors
+if(typeof window == 'undefined')
+   runBusRuleCode();
+
+//Server-side function
+function runBusRuleCode(){
+   current.u_uat_complete_tf = true;
+   current.u_uat_complete = gs.nowDateTime();
+   current.update();
+   action.setRedirectURL(current);
+}

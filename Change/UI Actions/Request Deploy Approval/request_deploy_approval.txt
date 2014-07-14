@@ -1,0 +1,38 @@
+//Client-side 'onclick' function
+function req_dep_apprv(){
+ //  if(<CONDITION_TO_VALIDATE> == false){
+ //     return false;  //Abort submission
+ //  }
+   //Call the UI Action and skip the 'onclick' function
+  // gsftSubmit(null, g_form.getFormElement(), 'workverify'); //MUST call the 'Action name' set in this UI Action
+   
+    var ans = confirm("Are you sure you want to request deploy approval for this change?");
+
+if(ans == false){
+return false;
+}
+else{
+gsftSubmit(null, g_form.getFormElement(), 'req_dep_approval');
+}
+		
+}
+
+//Code that runs without 'onclick'
+//Ensure call to server-side function with no browser errors
+if(typeof window == 'undefined')
+   runBusRuleCode();
+
+//Server-side function
+function runBusRuleCode(){
+   //current.u_request_approval = true;
+   //current.state = 64;
+  // current.u_review_complete = gs.nowDateTime();
+/*   current.u_create_duration =
+	   gs.dateDiff(current.sys_created_on.getDisplayValue(),
+       current.u_review_complete.getDisplayValue(),
+       true); 
+*/	   
+   current.u_request_deploy_apprv_tf = true;
+   current.update();
+   action.setRedirectURL(current);
+}
