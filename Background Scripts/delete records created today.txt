@@ -1,0 +1,10 @@
+//delete records created today
+var gr = new GlideRecord('sc_req_item');
+//gr.addQuery('active',false);
+var strQuery = 'sys_created_onONToday@javascript:gs.daysAgoStart(0)@javascript:gs.daysAgoEnd(0)';
+gr.addEncodedQuery(strQuery);
+gr.query();
+while (gr.next()) {
+   //Delete each record in the query result set
+   gr.deleteRecord();
+}
